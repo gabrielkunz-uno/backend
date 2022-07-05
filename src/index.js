@@ -4,21 +4,16 @@ const express = require('express');
 //criar uma constante que representa a nossa aplicação como um todo
 //vamos chamar ela de "app" e ela recebe a invocação do express
 const app = express();
-const db = require('./config/db');
 
-//criação de rota que vai listar todos os cadastros
-app.get('/clientes', async (req, res) => {
-    const sql = 'select * from clientes';
-    const clientes = await db.query(sql);
-    res.status(200).send({
-        dados: [],
-        quantidade: 12
-    });
-});
+
+app.use(express.json());
+
+//MIDDLEWARE
+require('./routes')(app);
 
 //define-se em qual porta a aplicação vai rodar
 //para isso usamos a função .listen(PORT, CALLBACK FUNCTION)
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
