@@ -15,7 +15,13 @@ const getClienteById = async (params) => {
 }
 
 //atualizar o cliente
-
+const patchCliente = async (params) => {
+    let fields = [];
+    Object.keys(params).forEach(campo => campo !== 'id' && fields.push(`${campo} = '${params[campo]}'`));
+    fields = fields.join(', ');
+    const sql = `update clientes set ${fields} where id = ${params.id}`;
+    await db.query(sql);
+}
 
 //inserir um novo cliente
 const postCliente = async (params) => {
@@ -33,10 +39,16 @@ const postCliente = async (params) => {
     return insert.rows[0];
 } 
 
-
 //deletar um cliente
+const deleteCliente = async (params) => {
+    let sql = 'delete from clientes where id = $1;';
+    let query = await db.query(sql, [params.id]);
+    return query.rowCount == 1;
+} 
 
 
 module.exports.getAllClientes = getAllClientes;
 module.exports.getClienteById = getClienteById;
 module.exports.postCliente = postCliente;
+module.exports.deleteCliente = deleteCliente;
+module.exports.patchCliente = patchCliente;

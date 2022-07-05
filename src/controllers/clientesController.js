@@ -27,6 +27,29 @@ const postCliente = async (req, res) => {
     }
 }
 
+const patchCliente = async (req, res) => {
+    try {
+        const cliente = await clientesService.patchCliente(req.body);
+        res.status(201).send(cliente);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+}
+
+const deleteCliente = async (req, res) => {
+    try {
+        let deletado = await clientesService.deleteCliente(req.params);
+        let msg = deletado 
+            ? `Cliente ${req.params.id} deletado com sucesso` 
+            : `Não foi encontrado nenhum cliente com o id ${req.params.id} para ser deletado`;
+        res.status(200).send({ msg });
+    } catch (err) {
+        res.status(500).send(err);
+    }
+}
+
 module.exports.getAllClientes = getAllClientes;
 module.exports.getClienteById = getClienteById;
 module.exports.postCliente = postCliente;
+module.exports.deleteCliente = deleteCliente;
+module.exports.patchCliente = patchCliente;
